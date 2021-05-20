@@ -25,7 +25,7 @@ DJANGO_SETTINGS_MODULE = 'COVID19_Andalucia.settings'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "xuwz^q-@9&y375#lt=t7hy&$6!hz-djfbn6o16wq+al$_kmq7h"
-DEBUG = False
+DEBUG = True
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
