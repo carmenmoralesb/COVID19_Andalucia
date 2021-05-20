@@ -1,0 +1,6 @@
+Django == 3.1.6
+gunicorn==20.0.4
+psycopg2-binary
+numpy==1.20.0 
+pandas
+gunicorn==20.0.4

@@ -1,0 +1,82 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+<div class="overview_ts">
+</div>
+<div class="main_cards">
+  <div class="card">
+    Aumento de los diagnosticados a 14 días
+    <canvas
+      class="responsive-canvas"
+      id="pie-chart"
+      width="350"
+      height="230"
+    ></canvas>
+  </div>
+  <div class="card">
+  <div class="prov_info-general">
+<span class="label label-pill label-danger">IA 14 {{ tasaInc14 }}</span>
+<span class="label label-pill label-warning">IA 7  {{ tasaInc7 }}</span>
+    <p class="info_prov_detail">
+      <i class="fas fa-square-full"></i><b>Municipios +500 IA: </b> {{townships500|length }} <i class="arrow down"></i>
+      <p class="show_info">{{townships500list}}</p>
+    </p>
+    <p class="info_prov_detail">
+      <i class="fas fa-square-full"></i
+      ><b>Municipios +100 IA </b> {{townships1000|length }} <i class="arrow down"></i>
+        <p class="show_info">{{townships1000list}}</p>
+  </div>      
+  </div>
+  <div class="card">
+  Evolución en hospitales
+      <canvas
+      class="responsive-canvas"
+      id="pie-chart3"
+      width="350"
+      height="150"
+    ></canvas>
+  </div>
+  <script>
+        var ctx = document.getElementById('pie-chart').getContext('2d');
+        var data_1 = {
+            datasets: [{
+            fill: true,
+            borderColor: "#99dcd1",
+            fill: false,
+            label: 'Contagios en un día',
+            data: {{ dataAument|safe }}
+            }],
+            labels: {{ labels|safe }}
+            };
+        var chart1 = new Chart(ctx, {
+            type: 'line',
+            data: data_1,
+            options: {
+                        responsive: true
+                    }
+                });
+
+          var ctx_3 = document.getElementById('pie-chart3').getContext('2d');
+          var data_3 = {
+            datasets: [{
+            backgroundColor: "#009688",
+            label: 'Hospitalizados Conv',
+            data: {{ dataHospitalizedCounter|safe }}
+            },
+            {
+            backgroundColor: "#6ec1b5",
+            label: 'UCI',
+            data: {{ dataICU|safe }}
+            }
+            ],
+            labels: {{ labels |safe }}
+            };
+          var chart3 = new Chart(ctx_3, {
+             type: 'bar',
+            data: data_3,
+            options: {
+                responsive: true
+                    }
+                });
+                
+  </script>
+  {% endblock %}
+</div>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+ <div class="overview_card">
+            <div class="overview_card-info">IA 14 días</div>
+            <div class="overview_card-icon">{{tasa14days}}</div>
+            <span class="card-day">{% if isMajorThanYesterday14 is True %} <i class="fas fa-angle-double-up"></i>
+</i>
+ {% elif isMajorThanYesterday14 is False %} <i class="fas fa-angle-double-down"></i>
+ {% endif %} </span>
+          </div>
+          <div class="overview_card">
+            <div class="overview_card-info">IA 7 días</div>
+            <div class="overview_card-icon">{{tasaInc7}}</div>
+            <span class="card-day">{% if isMajorThanYesterday7 is True %} <i class="fas fa-angle-double-up"></i>
+ {% elif isMajorThanYesterday7 is False %} <i class="fas fa-angle-double-down"></i>
+ {% endif %}
+ </span>
+          </div>
+          <div class="overview_card">
+            <div class="overview_card-info">Curados</div>
+            <div class="overview_card-icon">{{recovered}}</div>
+          </div>
+          <div class="overview_card">
+            <div class="overview_card-info">Fallecidos</div>
+            <div class="overview_card-icon">{{deceased}}</div>
+          </div>
+        </div>
+
+        <div class="main_cards">
+          <div class="card">Aumento de los diagnosticados a 14 días
+              <canvas class="responsive-canvas" id="pie-chart" width="350" height="250"></canvas>
+          </div>
+          <div class="card">Aumento de ingresados
+            <canvas class="responsive-canvas" id="pie-chart3"  width="350" height="150"></canvas>
+          </div>
+          <div class="card">Evolución de fallecidos y curados
+           <canvas class="responsive-canvas" id="pie-chart2" width="350" height="250"></canvas>
+           </div>
+           <div> Hola </div>
+  <script>     
+  </script>
+{% endblock %}
