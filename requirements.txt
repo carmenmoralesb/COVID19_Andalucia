@@ -6,3 +6,4 @@ pandas
 gunicorn==20.0.4
 django-heroku
 django-rest-framework
+dj-database-url
