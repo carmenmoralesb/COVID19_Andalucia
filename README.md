@@ -52,6 +52,9 @@ Ir a http://localhost:8000
 
 La migración y la creación de los modelos se hace automáticamente
 
+Puedes encontrar también el proyecto desplegado en Heroku:
+
+https://andalucovid.herokuapp.com/app/general/
 ## Fuentes de los datos
 Los datos recogidos en esta aplicación web son de uso público y de fuentes oficiales.
 - Datos de @Pakillo19 - https://github.com/Pakillo/COVID19-Andalucia/blob/master/datos/
