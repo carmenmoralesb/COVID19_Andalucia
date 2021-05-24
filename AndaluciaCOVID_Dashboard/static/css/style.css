@@ -7,6 +7,7 @@ body {
     box-sizing: border-box;
     font-size: 15px;
 }
+
 .grid-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -109,6 +110,7 @@ body {
     */
     color: #003400;
 }
+
 .overview_card {
     flex-basis: 250px;
     flex-grow: 1;
@@ -221,9 +223,11 @@ body {
     padding: 12px;
     color: black;
 }
+
 #responsive-canvas {
     width: 100%;
 }
+
 .header_search {
     margin-left: 24px;
 }

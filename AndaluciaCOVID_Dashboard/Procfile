@@ -1,1 +1,0 @@
-web: gunicorn COVID19_Andalucia.wsgi
