@@ -10,7 +10,7 @@ django.setup()
 from AndaluciaCOVID_Dashboard.models import *
 
 class Command(BaseCommand):
-    help = 'Use this command to populate de DB automatically'
+    help = 'Usa este comando para añadir los territorios de Andalucia la base de datos'
 
     def setRegions(self):
         directory = 'https://raw.githubusercontent.com/Pakillo/COVID19-Andalucia/master/datos/municipios.dia/Municipios_todos_datoshoy.csv'
@@ -21,7 +21,6 @@ class Command(BaseCommand):
             for listaDatos in (df[df["Lugar de residencia"] == "Andalucía"].values):
                 listData = listaDatos.tolist()
                 listRegister.append(listData[2])
-            print(listRegister)
             if (listRegister[4]==0):
                 valtasa14 = 0
             else:
@@ -52,13 +51,15 @@ class Command(BaseCommand):
                regionUpdating.deceased = int(listRegister[10])
                regionUpdating.recovered = int(listRegister[9])
                regionUpdating.save() 
+               print("Región añadida!")
+
         except IndexError as e:
             print(e)
 
 
     def getProvinces(self):
         """ 
-        Migrar a la base de datos las provincias,municipios y distritos de Andalucía
+        Añadir las provincias
         """
         try:
             directory = 'https://raw.githubusercontent.com/Pakillo/COVID19-Andalucia/master/datos/muni_prov_dist.csv'
@@ -66,11 +67,11 @@ class Command(BaseCommand):
                 'province', 'distrit', 'township'])
             df.drop(df.index[[0, 2]])
             for prov in df.province:
-                print(prov)
-                if (Province.objects.filter(name=prov).exists() == False):
+                if (Province.objects.filter(name=prov).exists() == False and prov != "Provincia"):
                     region = Region.objects.all()[0]
                     province = Province(name=prov,ccaa=Region(id=0,name="Andalucía"))
                     province.save()
+                    print("Provincia " + province.name + " añadida!")
         except IndexError as e:
             print(e)
 
@@ -82,10 +83,10 @@ class Command(BaseCommand):
             provinces = Province.objects.all()
             for province in provinces:
                 for distr in df[df.province == province.name].distrit:
-                    if (District.objects.filter(name=distr).exists() == False):
+                    if (District.objects.filter(name=distr).exists() == False and distr != "Distrito"):
                         distr = District(name=distr, province=province)
                         distr.save()
-
+                        print("Distrito " + distr.name + " añadido!")
         except IndexError as e:
             print(e)
 
@@ -98,11 +99,13 @@ class Command(BaseCommand):
             districts = District.objects.all()
             for district in districts:
                 for ts in df[df.distrit == district.name].township:
-                    if (Township.objects.filter(name=ts).exists() == False):
+                    if (Township.objects.filter(name=ts).exists() == False and ts != "Municipio"):
                         township = Township(name=ts, distrit=district)
                         township.save()
+                        print("Municipio " + township.name + " añadido!")
         except IndexError as e:
-            print(e)
+            print("¡Fecha sin datos!")
+
 
     def getTshipData(self, munName):
         try:
@@ -116,7 +119,6 @@ class Command(BaseCommand):
             for listaDatos in (df[df["Lugar de residencia"] == tship.name].values):
                 listData = listaDatos.tolist()
                 listRegister.append(listData[2])
-            print(listRegister)
             if (listRegister[4]==0):
                 valtasa14 = 0
             else:
@@ -133,7 +135,9 @@ class Command(BaseCommand):
             tship.totalConfirmed = int(listRegister[7])
             tship.deceased = int(listRegister[9])
             tship.recovered = int(listRegister[10])
-            tship.save()                    
+            tship.save()   
+            print("Municipio " + tship.name + " actualizado con datos!")        
+              
         except IndexError as e:
             print(e)    
 
@@ -149,7 +153,6 @@ class Command(BaseCommand):
             for listaDatos in (df[df["Lugar de residencia"] == province.name].values):
                 listData = listaDatos.tolist()
                 listRegister.append(listData[2])
-            print(listRegister)
             if (listRegister[4]==0):
                 valtasa14 = 0
             else:
@@ -167,17 +170,19 @@ class Command(BaseCommand):
             province.deceased = int(listRegister[10])
             province.recovered = int(listRegister[9])
             province.save()    
+            print("Provincia " + province.name + " actualizada con datos!")        
         except IndexError as e:
-            print(e)     
+            print("¡Fecha sin datos!")
+ 
 
     def handle(self, *args, **options):
-        print('Adding region...')
+        print('Añadiendo región...')
         self.setRegions()
-        print('Adding provinces...')
+        print('Añadiendo provincias...')
         self.getProvinces()
-        print('Adding distrits...')
+        print('Añadiendo distritos...')
         self.getDistrFromProv()
-        print('Adding townships...')
+        print('Añadiendo municipios...')
         self.getTownShipFromDistr()
 
         townships = Township.objects.all()
@@ -187,4 +192,4 @@ class Command(BaseCommand):
             self.getTshipData(township.name)   
         for prov in provinces:
             self.getProvinceData(prov.name)               
-        print('...MIGRATION SUCCESFUL!')
+        print('...MIGRACIÓN REALIZADA!')

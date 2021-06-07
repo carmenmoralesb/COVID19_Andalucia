@@ -1,54 +1,39 @@
-{% extends 'base.html' %} {% block content %} {% load static %}
-<div class="overview_ts"></div>
-<div class="main_cards">
-  <div class="card">
-    Aumento de los diagnosticados a 14 días
-    <canvas
-      class="responsive-canvas"
-      id="pie-chart"
-      width="350"
-      height="230"
-    ></canvas>
-  </div>
-  <div class="card">
-    <div class="prov_info-general">
-      <span class="label label-pill label-danger"
-        >IA 14 {{ tshipIncidence }}</span
-      >
-      <span class="label label-pill label-warning"
-        >{% if rules is 0 %}Nivel alto {% elif rules is 1 %} Nivel extremo {%
-        elif rules is 2 %} Nivel bajo {% endif %}</span
-      >
-      <span class="label label-pill label-warning">Cierre perimetral</span>
-      <p class="info_prov_detail">
-        <i class="fas fa-square-full"></i><b>Aumento </b> {{ tshipAument }}
-      </p>
-      <p class="info_prov_detail">
-        <i class="fas fa-square-full"></i><b>Confirmados PDIA </b> {{confirmedPDIA }}
-      </p>
-    </div>
-  </div>
-  <div class="card">
-    Evolución en hospitales
-    <canvas
-      class="responsive-canvas"
-      id="pie-chart3"
-      width="350"
-      height="150"
-    ></canvas>
-  </div>
+{% extends 'base.html' %} 
+{% block content %} 
+<div>
+<h2>Incidencia</h2>
+<ul>
+<li><div class="overview_card-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">IA 14:</a> <b>{{ tshipIncidence }} de incidencia a 14 días</b></div></li>
+<li><div class="overview_card-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">Aumento:</a> <b> {{ tshipAument }} nuevo(s) caso(s)</b></div></li>
+<li><div class="overview_card-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">Tasa a 7 días:</a><b>{{ tasa7days }}  de incidencia a 7 días</b></div></li>
+</ul>
+</div>
+
+<div>
+<h2>Fallecidos y recuperados totales</h2>
+<ul>
+                    <li><div class="overview_card-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">Recuperados totales</a>: <b>{{recovered}} recuperados en total</b></div></li>
+                    <li><div class="overview_card-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">Fallecidos totales</a>: <b> {{deceased}} fallecidos en total</b></div></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="flex-grid">
+            <div>
+                <h2>Aumento diario de contagios</h2> 
+                <canvas class="responsive-canvas" id="pie-chart" width="350" height="230"></canvas>
+            </div>
+        </div>
+
   <script>
     var ctx = document.getElementById('pie-chart').getContext('2d');
     var data_1 = {
-        datasets: [{
-        borderColor: "#99dcd1",
-        fill: false,
-        label: 'Confirmados 14 días POR 100K hab',
-        data: {{ confirmed14days100hab|safe }}
-        },
+        datasets: [
         {
+        borderWidth: 1,
+        backgroundColor: "#f6e3bd",
         borderColor: "#99dcd1",
-        fill: false,
+        fill: true,
         label: 'Confirmados 14 días',
         data: {{ confirmed14days|safe }}
         }
@@ -60,26 +45,26 @@
         type: 'line',
         data: data_1,
         options: {
-                    responsive: true
+            legend: {
+                labels: {
+                    fontColor: setColorText()
                 }
-            });
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        fontColor: setColorText()
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: setColorText(),
+                    }
+                }]
+            }
+        }
+    });
 
-      var ctx_3 = document.getElementById('pie-chart3').getContext('2d');
-      var data_3 = {
-        datasets: [{
-        backgroundColor: "#009688",
-        label: 'Fallecidos',
-        data: {{ deceases|safe }}
-        }],
-        labels: {{ labels |safe }}
-        };
-      var chart3 = new Chart(ctx_3, {
-         type: 'bar',
-        data: data_3,
-        options: {
-            responsive: true
-                }
-            });
   </script>
   {% endblock %}
 </div>

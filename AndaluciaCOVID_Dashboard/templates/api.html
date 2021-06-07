@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+</div>
+<div>
+<h2>Documentación de la API Rest</h2>
+<p>Bienvenido a la documentación de la  <a active="false" class="underline">API Rest</a> de la aplicación, aquí podrás encontrar las peticiones
+REST que puedes realizar para obtener los datos en formato JSON sobre la situación del SarsCov2 en Andalucía,
+estos datos se pueden encontrar en el informe diario del  <a active="false" class="underline">Ministerio de Salud de España</a> o en el  <a active="false" class="underline">portal de IECA</a>.</p>
+
+<p>Para obtener los datos basta con hacer click en alguno de los enlaces, se nos presentarán los datos en un formato como el siguiente:
+<p><pre>
+HTTP 200 OK
+Allow: GET, OPTIONS
+Content-Type: application/json
+Vary: Accept
+
+[
+    {
+        "id": 1,
+        "name": "Almería",
+        "region_name": "Andalucía",
+        "poblation": 727945,
+        "confirmedPDIA": 54342,
+        "totalConfirmed": 54650,
+        "tasa14days": 77,
+        "tasa7days": 37,
+        "deceased": 829,
+        "recovered": 52720
+    }
+]
+</pre></p>
+<p>Donde obtendremos un  <a active="false" class="underline">objeto JSON</a> que podremos mapear en nuestra aplicación o bien obtener con python utilizando scrapping. 
+<br>Estos datos son de uso público y pertenecen a fuentes oficiales.
+</p>
+</div>
+
+ <div class="flex-grid">
+ <div>
+<h2>Listado de territorios</h2>
+<ul>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Regiones</button><a href="{% url 'region-list' %}"><code>http://localhost:8000/app/rest_api/region-lista</code></a></li>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Provincias</button><a href="{% url 'province-list' %}"><code>http://localhost:8000/app/rest_api/provincia-lista</code></a></li>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Distritos</button><a href="{% url 'district-list' %}"><code>http://localhost:8000/app/rest_api/distrito-lista</code></a></li>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Municipios</button><a href="{% url 'township-list' %}"><code>http://localhost:8000/app/rest_api/municipio-lista</code></a></li>
+    </li>
+</ul>
+</div>
+</div>
+
+<div class="flex-grid">
+<div>
+<h2>Acumulados</h2>
+<ul>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Acumulado de la región</button><a href="{% url 'region-acumulated-all' %}"><code>http://localhost:8000/app/rest_api/region-acumulated-all</code></a></li>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Acumulado de provincias</button><a href="{% url 'province-acumulated-all'%}"><code>http://localhost:8000/app/rest_api/province-acumulated-all</code></a></li>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Acumulado detalle región</button><a href="{% url 'region-acumulated-detail' 0%}"><code>http://localhost:8000/app/rest_api/region-acumulated-detail/0</code></a></li>
+
+    </li>
+</ul>
+</div>
+</div>
+
+ <div class="flex-grid">
+ <div>
+<h2>Históricos</h2>
+<ul>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Histórico de provincias</button><a href="{% url 'region-historic-detail' 0 %}"><code>http://localhost:8000/app/rest_api/region-historico-detalle/0</code></a></li>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Histórico de distritos</button><a href="{% url 'province-historic-detail' 1 %}"><code>http://localhost:8000/app/rest_api/provincia-historico-detalle/1</code></a></li>
+    <li><div class="overview_card-icon"><button type="button" class="btn btn-success  mr-1">GET</button><button type="button" class="btn btn-info  mr-1">Histórico de municipios</button><a href="{% url 'township-historic-detail' 1 %}"><code>http://localhost:8000/app/rest_api/municipio-historico-detalle/1</code></a></li>
+    </li>
+</ul>
+</div>
+</div>
+{% endblock %}

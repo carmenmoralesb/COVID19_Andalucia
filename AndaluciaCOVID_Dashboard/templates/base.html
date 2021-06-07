@@ -4,100 +4,49 @@
   <meta charset="utf-8" />
   {% load static %}
   <title>{% block title %}Andalucía COVID Dashboard{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
-  <!-- Optional theme -->
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+  <script src="{% static 'js/setColorText.js' %}"></script>
+  <script src="{% static 'js/setMenuAnimation.js' %}"></script>
+  <script src="{% static 'js/setTerritoriesProc.js' %}"></script>
   <link href="{% static 'css/style.css' %}" rel="stylesheet" media="screen" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Andalucía COVID</title>
-    <script>
-    $(document).ready(function () {
-      $(".show_info").hide();
-      $(".arrow").click(function () {
-        if ($(".show_info").is(":hidden")) {
-          $(".show_info").show(1000);
-        } else {
-          $(".show_info").hide(1000);
-        }
-      });
-    });
-  </script>
-</head>
-<body>
-  <div id="page" class="grid-container">
-    <div class="menu-icon">
-      <strong> &#9776;</strong>
-    </div>
-    <header class="header">
-      <input id="something" list="somethingelse" placeholder="Buscar un territorio..">
+  </head>
+  <div class="wrapper">
+    <nav id="nav">
+        <header>
+            <div class="logo">
+            <img src="https://polkschoolsfl.com/wp-content/uploads/mainsite/SafetyProtocolsCOVID19Response-250x250.png">
+           Covid19
+            <a href="javascript:void(0)" class="closebtn" ></a>
+            </div>
+        </header>
+        <ul>
+            <li>
+              <span>Navegación</span>
+            </li>
+            <li><a class="active">Dashboard</a></li>
+            <li><a href="{% url 'dash_general_view' %}">General</a></li>
+            <li><a class="" href="{% url 'dash_province_view' %}">Provincias</a></li>
+            <li><a class="" href="{% url 'rest_api' %}">API</a></li>
+            <li class="aside_list-item"><a class="" href="{% url 'faq' %}">FAQ</a></li>
+            </li>
+        </ul>
+    </nav>
+    <main id="main">
+     <h1>
+      <input id="something" list="somethingelse" placeholder=" Buscar un territorio..">
       <datalist id="somethingelse">
         {% for territory in territories %}
-        <option id="{{ territory.id }}" value="{{ territory.name }}">{{territory.distrit.province.name}}</option>
+        <option id="{{ territory.id }}" value="{{ territory.name }}">{{territory.name}},{{ territory.distrit.province.name }}</option>
         {% endfor %}
       </datalist>
-      <button class="button"><i class="fa fa-search"></i></button>
-    </header>
-    <aside class="aside">
-      <div class="aside_close-icon">
-        <strong>&times;</strong>
-      </div>
-      <div class="header_menu">
-        <img class="header_menu_img" src="{% static 'img/golotipo.png' %}" alt="logo" />
-      </div>
-      <ul class="aside_list">
-        <li class="aside_list-item"><a href="{% url 'dash_general_view' %}"><i class="fas fa-chart-line"
-              style="margin-right: 10px;"></i></i>General</a></li>
-        <li class="aside_list-item"><a class="" href="{% url 'dash_province_view' %}"><i class="fas fa-chart-bar"
-              style="margin-right: 10px;"></i>Provincias</a></li>
-        <li class="aside_list-item"><i class="fas fa-chart-area" style="margin-right: 10px;"></i>Vacunación</li>
-        <li class="aside_list-item"><i class="fas fa-question-circle" style="margin-right: 10px;"></i>Q&A</li>
-      </ul>
-    </aside>
-    <main class="main">
-      <div class="main_overview">
+      <button class="button">Buscar</button>
+        </h1>
+          <h2 class="territory">{{ territoryName }}</h2>
+        <div class="flex-grid">
         {% block content %}{% endblock %}
-      </div>
     </main>
-          <div class="footer">Datos actualizados el 12-05-2021</div>
-    </div>
-    <script type="text/javascript">
-      const menuIcon = document.querySelector('.menu-icon');
-      const aside = document.querySelector('.aside');
-      const asideClose = document.querySelector('.aside_close-icon');
-
-      function toggle(el, className) {
-        if (el.classList.contains(className)) {
-          el.classList.remove(className);
-        } else {
-          el.classList.add(className);
-        }
-      }
-
-      menuIcon.addEventListener('click', function () {
-        toggle(aside, 'active');
-      });
-
-      asideClose.addEventListener('click', function () {
-        toggle(aside, 'active');
-      });
-      $(function () {
-        $('#something').on('input', function () {
-          var url = "{% url 'dash_township_detail_view' 123 %}";
-          var opt = $('option[value="' + $(this).val() + '"]');
-          if (opt.attr('id')!=null && opt.attr('id')!=undefined) {
-          document.location.href = url.replace('123', opt.attr('id'))
-          };
-        });
-      });
-    </script>
-</body>
-
+</div>
 </html>

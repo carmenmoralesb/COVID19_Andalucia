@@ -1,46 +1,41 @@
-{% extends 'base.html' %} {% block content %}
-<div class="overview_provs">
+{% extends 'base.html' %}
+{% block content %}
+<div>
+<h2>Lista de provincias</h2>
   {% for prov in provinces %}
-  <a
+  <a 
     href="{% url 'dash_province_detail_view' prov.pk %}"
     class="button button-pill"
     >{{ prov.name }}</a>
   {% endfor %}
-</div>
-<div class="main_cards" stye="margin-bottom:0px 0px 15px;">
-  <div class="card">
-    <canvas
-      class="responsive-canvas"
-      id="pie-chart"
-      width="350"
-      height="250"
-    ></canvas>
-    </div>
-    <div class="card">
-      Aumento de ingresados
-      <canvas
-        class="responsive-canvas"
-        id="pie-chart3"
-        width="350"
-        height="150"
-      ></canvas>
-    </div>
-    <div class="card">
-      Aumento de contagios diarios
-      <canvas
-        class="responsive-canvas"
-        id="pie-chart2"
-        width="350"
-        height="250"
-      ></canvas>
-    </div>
+   </div>
+   </div>
+
+        <div class="flex-grid">
+            <div>
+                <h2>Situación de los hospitales en cada provincia</h2> 
+                <canvas class="responsive-canvas" id="pie-chart3" width="350" height="230"></canvas>
+            </div>
+            <div>
+                <h2>Comparación de aumentos en cada provincia</h2> 
+               <canvas class="responsive-canvas" id="pie-chart2" width="350" height="230"></canvas>
+            </div>
+        </div>
+
+        <div class="flex-grid">
+            <div>
+                <h2>Evolución de la positividad</h2>
+                <canvas class="responsive-canvas" id="pie-chart" width="350" height="230"></canvas>
+            </div>
+
     <script>
                 var ctx = document.getElementById('pie-chart2').getContext('2d');
                 var data_1 = {
                     datasets: [{
                     fill: true,
                     backgroundColor: [
-                        '#009688', '#3ea79a', '#5fb9ac', '#6ec1b5', '#86d0c4','#9edfd4','#b5eee4','#7ec6b9'
+                        '#c5ca99', '#dfd6aa', '#f6e3bd', 
+                        '#f1cd9f', '#efb585','#ec9c71','#e98163','#e5645c'
                       ],
                     label: 'Contagios en un día',
                     data: {{ provincesIncidence|safe }}
@@ -50,14 +45,25 @@
                 var chart1 = new Chart(ctx, {
                     type: 'pie',
                     data: data_1,
-                    options: {
-                            scales: {
-                  y: {
-                    min: 0
-                  }
-                },
-                                responsive: true
-                            }
+        options: {
+            legend: {
+                labels: {
+                    fontColor: setColorText()
+                }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        fontColor: setColorText()
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: setColorText(),
+                    }
+                }]
+            }
+        }
                         });
 
 
@@ -77,15 +83,15 @@
           ],
           datasets: [{
             label: 'PCR 14 días',
-            backgroundColor: "#70EBD6",
+            backgroundColor: "#f1cd9f",
             data: {{pcr14days|safe}},
           }, {
             label: 'PCR 7 días',
-            backgroundColor: "#45c490",
+            backgroundColor: "#f6e3bd",
             data: {{pcr7days|safe}},
           }, {
             label: 'Curados',
-            backgroundColor: "#2e5468",
+            backgroundColor: "#c5ca99",
             data: {{recovered|safe}},
           }],
         },
@@ -96,9 +102,16 @@
               mode: 'x',
             },
           },
+          legend: {
+                labels: {
+                    fontColor: setColorText()
+                }
+            },
           scales: {
             xAxes: [{
               stacked: true,
+              ticks: {
+                fontColor: setColorText()},
               gridLines: {
                 display: false,
               }
@@ -106,26 +119,30 @@
             yAxes: [{
               stacked: true,
               ticks: {
+                fontColor: setColorText(),
                 beginAtZero: true,
               },
               type: 'linear',
             }]
           },
           responsive: true,
-          maintainAspectRatio: false,
-          legend: { position: 'bottom' },
+          maintainAspectRatio: false
         }
       });
 
             var ctx_3 = document.getElementById('pie-chart3').getContext('2d');
             var data_3 = {
               datasets: [{
-              backgroundColor: "#009688",
+              borderColor: "#efb585",
+              borderWidth: 1,
+              backgroundColor: "#f1cd9f",
               label: 'IA 14 días',
               data: {{ tasa14dias|safe }}
               },
               {
-              backgroundColor: "#6ec1b5",
+              borderColor: "#6fa577",
+              backgroundColor: "#8db27f",
+              borderWidth: 1,
               label: 'Curados',
               data: {{ recovered|safe }}
               }
@@ -135,9 +152,25 @@
             var chart3 = new Chart(ctx_3, {
                type: 'bar',
               data: data_3,
-              options: {
-                  responsive: true
-                      }
+        options: {
+            legend: {
+                labels: {
+                    fontColor: setColorText()
+                }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        fontColor: setColorText()
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: setColorText(),
+                    }
+                }]
+            }
+        }
                   });
     </script>
     {% endblock %}

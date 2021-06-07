@@ -5,13 +5,16 @@ from django.conf.urls import url
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')), 
     # api
-    path('api-overview', views.apiOverview, name="api-overview"),
-    path('province-list', views.provinceList, name="province-list"),
-    path('district-list', views.districtList, name="province-list"),
-    path('township-list', views.townshipList, name="province-list"),
-    path('region-historic-detail/', views.regionHistoricDetail, name="region-historic-detail"),     
-    path('township-historic-detail/<str:name>/', views.townshipHistoricDetail, name="township-historic-detail"),
-    path('province-historic-detail/<str:name>/', views.provinceHistoricDetail, name="township-historic-detail"),
-    path('region-acumulated-all/', views.regionAccumulatedAll, name="region-acumulated-detail"),
-    path('province-acumulated-all/', views.provinceAccumulatedAll, name="province-acumulated-all")   
+    path('api-documentacion', views.apiOverview, name="api-overview"),
+    path('region-lista', views.regionList, name="region-list"),
+    path('provincia-lista', views.provinceList, name="province-list"),
+    path('distrito-lista', views.districtList, name="district-list"),
+    path('municipio-lista', views.townshipList, name="township-list"),
+    path('region-historico-detalle/<int:pk>/', views.regionHistoricDetail, name="region-historic-detail"),     
+    path('municipio-historico-detalle/<int:pk>/', views.townshipHistoricDetail, name="township-historic-detail"),
+    path('provincia-historico-detalle/<int:pk>/', views.provinceHistoricDetail, name="province-historic-detail"),
+    path('region-acumulado/', views.regionAccumulatedAll, name="region-acumulated-all"),
+    path('provincia-acumulado', views.provinceAccumulatedAll, name="province-acumulated-all"),
+    path('region-acumulado-detalle/<int:pk>/', views.regionAccumulatedDetail, name="region-acumulated-detail"),
+  
 ]

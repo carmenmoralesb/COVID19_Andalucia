@@ -12,9 +12,8 @@ django.setup()
 class Command(BaseCommand):
     help = 'Usa este comando para borrar registros antiguos'
 
-    def setRegions(self,date):
+    def deleteOldData(self,date):
         date = date.strftime('%d/%m/%Y')
-
         try:
             AcumulatedProvinces.objects.filter(date<date).delete()
             AcumulatedRegion.objects.filter(date<date).delete()
@@ -30,5 +29,5 @@ class Command(BaseCommand):
 
         start = datetime.now() - timedelta(days=14)
         start_dt = start.date()
-        self.deleteOldRegisters(dt)
+        self.deleteOldData(dt)
         print('...Borrado realizado!')

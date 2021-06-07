@@ -112,7 +112,7 @@ class HistoricTownship(models.Model):
 class HistoricGeneral(models.Model):
     id = models.AutoField(primary_key=True)
     date = models.DateField(max_length=100)
-    cAutonoma = models.CharField(max_length=50,verbose_name="Nombre",default=0)
+    cAutonoma = models.ForeignKey(Region, on_delete=models.CASCADE,null=True, verbose_name='Region',default=0)
     confirmedPDIA = models.IntegerField(null=False,verbose_name="Confirmados PDIA",default=0)
     totalConfirmed = models.IntegerField(null=False,verbose_name="Total Confirmados",default=0)
     Hospitalized = models.IntegerField(null=False, verbose_name="Hospitalizados",default=0)

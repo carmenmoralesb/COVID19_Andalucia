@@ -11,9 +11,9 @@ django.setup()
 from AndaluciaCOVID_Dashboard.models import *
 
 class Command(BaseCommand):
-    help = 'Use this command to retrieve up-to-date data of COVID19 from IECA'
+    help = 'Usa este comando para obtener el histórico de dats de COVID'
 
-    def updateHistoricProvince(self):
+    def updateHistoricProvinceRegion(self):
         try:
             directory = 'https://raw.githubusercontent.com/Pakillo/COVID19-Andalucia/master/datos/datos_provincias_clean.csv'
             df = pd.read_csv(directory, delimiter=",", names=[
@@ -37,9 +37,10 @@ class Command(BaseCommand):
                         newHistoric.save()
             for row in (df[df["prov"] == 'Andalucía'].values):
                 ifExists = HistoricGeneral.objects.filter(date=row[0],cAutonoma=Region.objects.all()[0])
+                cAutonom = Region.objects.filter(name=row[1])[0]
                 if (ifExists.count()==0):
                     newHistoricGeneral = HistoricGeneral(date=row[0],
-                    cAutonoma=row[1],
+                    cAutonoma=cAutonom,
                     confirmedPDIA=int(row[2]),
                     totalConfirmed=int(row[3]),
                     Hospitalized=int(row[4]),
@@ -81,8 +82,7 @@ class Command(BaseCommand):
                     if (row[0]>=covid_data_df):
                         district = District.objects.filter(name=row[2])
                         ifExists = HistoricDistrit.objects.filter(date=row[0],distr=district[0])
-                        if (ifExists.count()==0):
-                            print(row)       
+                        if (ifExists.count()==0):    
                             newHistoricDistrict = HistoricDistrit(date=row[0],
                                                 distr=district[0],
                                                 Confirmados_PCR_TA=int(row[4]),
@@ -92,7 +92,7 @@ class Command(BaseCommand):
                                                 deceases=int(row[8]))
                             newHistoricDistrict.save()
         except IndexError as e:
-            print(e)
+            print("¡Fecha sin datos!")
     
     def setHistoricTownships(self):
         try:
@@ -117,11 +117,9 @@ class Command(BaseCommand):
             for tship in townshipList:
                 for row in (df[df["township"] == tship.name].values):
                     if (row[0]>covid_data_df):
-                        print(row[0])
                         tshipsel = Township.objects.filter(name=row[3])
                         ifExists = HistoricTownship.objects.filter(date=row[0],township=tshipsel[0])
                         if (ifExists.count()==0):
-                            print(row)       
                             newHistoricTownship = HistoricTownship(date=row[0],
                             township=tshipsel[0],
                             Confirmados_PCR_TA=int(row[4]),
@@ -131,11 +129,13 @@ class Command(BaseCommand):
                             deceases=int(row[8]))
                             newHistoricTownship.save()
         except IndexError as e:
-            print(e)
+            print("¡Fecha sin datos!")
+
   
     def handle(self, *args, **options):
-        print('Updating...')
-        self.updateHistoricProvince()
-        self.updateHistoricDistrict()
+        print('Obteniendo últimos históricos de provincias y región...')
+        self.updateHistoricProvinceRegion()
+       #self.updateHistoricDistrict()
+        print('Obteniendo últimos históricos de los municipios...')
         self.setHistoricTownships()
-        print('...MIGRATION SUCCESFUL!')
+        print('...MIGRACIÓN REALIZADA!')

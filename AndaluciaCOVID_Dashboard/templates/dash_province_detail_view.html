@@ -1,69 +1,94 @@
-{% extends 'base.html' %} {% block content %} {% load static %}
-<div class="overview_ts">
+{% extends 'base.html' %} {% block content %}
+<div>
+<h2>Incidencia</h2>
+<ul class="stadistic">
+<li><div class="overview_card-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">Tasa a 14 días:</a><b> {{tasaInc14}} de incidencia acumulada a 14 días</b></div></li>
+<li><div class="overview_card-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">Tasa a 7 días:</a> <b> {{tasaInc7}} de incidencia acumulada a 7 días</b></div></li>
+</ul>
 </div>
-<div class="main_cards">
-  <div class="card">
-    Aumento de los diagnosticados a 14 días
+<div>
+                <h2>Fallecidos y recuperados totales</h2>
+                <ul>
+                    <li><div class="overview_card-icon"><img class="square" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">Recuperados totales:</a><b>{{recovered}} recuperados en total</b></div></li>
+                    <li><div class="overview_card-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCcDYVx18qGpJaLVJFNSGUoQfLEXd6zAMv3A&usqp=CAU"><a active="false" class="underline">Fallecidos totales:</a><b>{{deceased}} fallecidos en total</b></div></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Estado de los municipios</h2>
+                <ul>
+                    <li><div class="overview_card-icon"><img src="https://icon-library.com/images/map-location-icon/map-location-icon-10.jpg"><a active="false" class="underline">Municipios +500 IA:</a> {{townships500list}}</div></li>
+                    <li><div class="overview_card-icon"><img src="https://icon-library.com/images/map-location-icon/map-location-icon-10.jpg"><a active="false" class="underline">Municipios +1000 IA:</a> {{townships1000list}}</div></li>
+                </ul> 
+                </div>       
+        </div>
+
+        <div class="flex-grid">
+            <div>
+                <h2>Aumento de los contagios</h2> 
     <canvas
       class="responsive-canvas"
       id="pie-chart"
-      width="350"
-      height="230"
     ></canvas>
-  </div>
-  <div class="card">
-  <div class="prov_info-general">
-<span class="label label-pill label-danger">IA 14 {{ tasaInc14 }}</span>
-<span class="label label-pill label-warning">IA 7  {{ tasaInc7 }}</span>
-    <p class="info_prov_detail">
-      <i class="fas fa-square-full"></i><b>Municipios +500 IA: </b> {{townships500|length }} <i class="arrow down"></i>
-      <p class="show_info">{{townships500list}}</p>
-    </p>
-    <p class="info_prov_detail">
-      <i class="fas fa-square-full"></i
-      ><b>Municipios +100 IA </b> {{townships1000|length }} <i class="arrow down"></i>
-        <p class="show_info">{{townships1000list}}</p>
-  </div>      
-  </div>
-  <div class="card">
-  Evolución en hospitales
-      <canvas
+            </div>
+            <div>
+                <h2>Evolución de hospitalizados</h2> 
+     <canvas
       class="responsive-canvas"
       id="pie-chart3"
-      width="350"
-      height="150"
     ></canvas>
-  </div>
+            </div>
+        </div>
   <script>
         var ctx = document.getElementById('pie-chart').getContext('2d');
         var data_1 = {
             datasets: [{
             fill: true,
-            borderColor: "#99dcd1",
-            fill: false,
+            borderColor: "#e5a276",
+            backgroundColor: "#e9be91",
+            borderWidth: 1,
             label: 'Contagios en un día',
             data: {{ dataAument|safe }}
             }],
             labels: {{ labels|safe }}
             };
         var chart1 = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: data_1,
-            options: {
-                        responsive: true
+        options: {
+            legend: {
+                labels: {
+                    fontColor: setColorText()
+                }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        fontColor: setColorText()
                     }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: setColorText(),
+                    }
+                }]
+            }
+        }
                 });
 
           var ctx_3 = document.getElementById('pie-chart3').getContext('2d');
           var data_3 = {
             datasets: [{
-            backgroundColor: "#009688",
+            borderColor: "#009688",
+            backgroundColor: "#99dcd1",
+            borderWidth: 1,
             label: 'Hospitalizados Conv',
             data: {{ dataHospitalizedCounter|safe }}
             },
             {
-            backgroundColor: "#6ec1b5",
+            borderColor: "#de425b",
+            backgroundColor: "#f3babc",
             label: 'UCI',
+            borderWidth: 1,
             data: {{ dataICU|safe }}
             }
             ],
@@ -72,9 +97,25 @@
           var chart3 = new Chart(ctx_3, {
              type: 'bar',
             data: data_3,
-            options: {
-                responsive: true
+        options: {
+            legend: {
+                labels: {
+                    fontColor: setColorText()
+                }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        fontColor: setColorText()
                     }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: setColorText(),
+                    }
+                }]
+            }
+        }
                 });
                 
   </script>

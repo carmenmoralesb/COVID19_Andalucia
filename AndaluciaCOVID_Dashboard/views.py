@@ -1,9 +1,12 @@
+from os import name
 from django.shortcuts import render
 import json
 from .serializers import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from datetime import timedelta, date, datetime
+from django.template import loader
+from django.http import HttpResponse
 
 # APP VIEWS
 def dash_general_view(request):
@@ -63,13 +66,6 @@ def dash_general_view(request):
         'recoveredList': recoveredList,
         'percentageAument':percentageAument
     })
-
-def dash_search_view(request):
-    resultsFilter = []
-    
-    nameFilter = request.GET.get('something')
-    territoryToView = Township.objects.filter(name=nameFilter)
-    return dash_township_detail_view(request,territoryToView.first())
 
 def dash_province_view(request):
     provinces = Province.objects.order_by('name')
@@ -208,14 +204,16 @@ def dash_township_detail_view(request,pk):
                 str(queryset[count].date.day) + '/' + str(queryset[count].date.month))
         confirmed14days.append(register.Confirmados_PCR_TA_14d)
         confirmed14days100hab.append(register.confirmed14100hab)
-        deceases.append(register.deceases)
 
     tshipTot1 = queryset[0].totalConfirmed
     tshipTot2 = queryset[1].totalConfirmed
 
-    tshipAument = tshipTot1 - tshipTot2
+    tshipAument = tshipTot2 - tshipTot1
     tshipIncidence = tship.tasa14days
     confirmedPDIA = tship.confirmedPDIA
+    tasa7days = tship.tasa7days
+    deceased = queryset[0].deceases
+    recovered = tship.deceased
 
     if (tshipIncidence>=500 and tshipIncidence<=10000):
         rules = 0
@@ -232,14 +230,36 @@ def dash_township_detail_view(request,pk):
         'confirmed14days100hab':confirmed14days100hab,
         'rules': rules,
         'confirmedPDIA':confirmedPDIA,
-        'deceases':deceases
+        'tasa7days':tasa7days,
+        'deceased':deceased,
+        'recovered':recovered
     })   
+
+def handler404(request, *args, **argv):
+    response = render_to_response('404.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+
+def handler500(request, *args, **argv):
+    response = render_to_response('500.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 500
+    return response
+
+def question_answers(request):
+    return render(request, 'questions_answers.html', {})
+
+def rest_api(request):
+    return render(request, 'api.html', {})
 
 
 # API VIEWS
 @api_view(['GET'])
 def apiOverview(request):
     api_urls = {
+        'Lista de regiones': '/region-list/',
         'Lista de provincias': '/province-list/',
         'Lista de municipios': '/township-list/',
         'Lista de distritos': '/district-list/',
@@ -251,6 +271,13 @@ def apiOverview(request):
         'Acumulados en los municipios': '/township-acumulated-all/'
     }
     return Response(api_urls)
+
+
+@api_view(['GET'])
+def regionList(request):
+    regions = Region.objects.all()
+    serializer = RegionSerializer(regions, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -276,23 +303,24 @@ def townshipList(request):
 
 @api_view(['GET'])
 def townshipHistoricDetail(request, pk):
-    tship = Township.objects.filter(name=pk)[0].order_by('-date',)
-    townshipHistorics = HistoricTownship.objects.filter(township=tship)
+    tship = Township.objects.filter(pk=pk)[0]
+    townshipHistorics = HistoricTownship.objects.filter(township=tship).order_by('-date',)
     serializer = TownshipHistoricDetailSerializer(townshipHistorics, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def provinceHistoricDetail(request, pk):
-    province = Province.objects.filter(pk=pk)[0].order_by('-date',)
-    provinceHistorics = HistoricProvince.objects.filter(province=province)
+    province = Province.objects.filter(pk=pk)[0]
+    provinceHistorics = HistoricProvince.objects.filter(province=province).order_by('-date',)
     serializer = ProvinceHistoricDetailSerializer(provinceHistorics, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def regionHistoricDetail(request):
-    regionHistorics = HistoricGeneral.objects.all().order_by('-date',)
+def regionHistoricDetail(request,pk):
+    region = Region.objects.filter(pk=pk)[0]
+    regionHistorics = HistoricGeneral.objects.filter(cAutonoma=region).order_by('-date',)
     serializer = RegionHistoricDetailSerializer(regionHistorics, many=True)
     return Response(serializer.data)
 
@@ -308,4 +336,18 @@ def regionAccumulatedAll(request):
 def provinceAccumulatedAll(request):
     provinceAcc = AcumulatedProvinces.objects.all().order_by('-date',)
     serializer = ProvincesAccumulatedSerializer(provinceAcc, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def regionAccumulatedDetail(request, pk):
+    region = Region.objects.filter(pk=pk)[0]
+    regionAcc = AcumulatedRegion.objects.filter(ccaa=region).order_by('-date',)
+    serializer = RegionAccumulatedSerializer(regionAcc, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def provinceAccumulatedDetail(request, pk):
+    prov = Province.objects.filter(pk=pk)[0]
+    provAcc = AcumulatedProvinces.objects.filter(province=prov).order_by('-date',)
+    serializer = ProvincesAccumulatedSerializer(prov, many=True)
     return Response(serializer.data)

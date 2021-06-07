@@ -47,8 +47,9 @@ class Command(BaseCommand):
                     deceased=int(listRegister[7]),
                     recovered=int(listRegister[8]))
                 newRegisterAccumulated.save()
+                print("Registro añadido")
         except IndexError as e:
-            print(e)
+            print("Fecha sin datos")
 
     def getAcumulatedTodayReg(self, date):
         try:
@@ -63,7 +64,6 @@ class Command(BaseCommand):
                 if (listaDatos[0] == dateDF):
                     listData = listaDatos.tolist()
                     listRegister.append(listData[3])
-            print(listRegister)
             registerExists = AcumulatedRegion.objects.filter(
                 ccaa=regionObject, date=date)
             if (registerExists.count() == 0):
@@ -81,17 +81,17 @@ class Command(BaseCommand):
                     recovered=int(listRegister[8]))
                 newRegisterAccumulated.save()
                 listRegister.clear()
+                print("Registro añadido")
         except IndexError as e:
-            print(e)
+            print("Fecha sin datos")
 
     def daterange(self, date1, date2):
         for n in range(int((date2 - date1).days)+1):
             yield date1 + timedelta(n)
 
     def handle(self, *args, **options):
-        print('Updating...')
+        print('Obteniendo los últimos datos acumulados...')
         argument = options["territorio"] if options["territorio"] else "mun"
-        townships = Township.objects.all()
         provinces = Province.objects.all()
 
         start = datetime.now() - timedelta(days=14)
@@ -103,4 +103,4 @@ class Command(BaseCommand):
             elif (argument != "mun"):
                 for province in provinces:
                     self.getAcumulatedTodayProv(province.name, dt)
-        print('...MIGRATION SUCCESFUL!')
+        print('...MIGRACIÓN REALIZADA!')

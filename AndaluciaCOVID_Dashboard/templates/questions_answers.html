@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+<h2>FAQ</h2>
+     <p class="info_prov_detail">
+      <a active="false" class="underline"><b>¿De qué fuentes se obtienen los datos? </b></a>
+      <p>Los datos se obtienen de diferentes fuentes, pero siempre son datos oficiales respaldados por
+         el Ministerio de Sanidad y la Junta de Andalucía (IECA).</p>
+    </p>
+      <p class="info_prov_detail">
+      <a active="false" class="underline"><b>¿Puedo utilizar los datos en mi propio proyecto? </b></a>
+      <p>Sí, además de tener disponibles las fuentes oficiales mencionadas anteriormente puedes usar
+      la API disponible <a href="{% url 'api-overview' %}">aquí</a> para obtener los datos en formato
+      JSON.</p>
+    </p>
+      <p class="info_prov_detail">
+     <a active="false" class="underline"><b>No me funciona el modo oscuro aunque lo tenga configurado en mi dispositivo</b></a>
+      <p>Esta funcionalidad es compatible con todos los navegadores modernos, básicamente Firefox y Chrome así como los basados en Chromium como Opera, Brave o Microsoft Edge. 
+      Incluso en sus versiones móviles podrás ver la página web en modo oscuro.
+      </p>
+      <p class="info_prov_detail">
+     <a active="false" class="underline"><b>No puedo ver los últimos datos actualizados</b></a>
+        <br>Los datos se actualizan en la página del IECA cada día sobre las 13:00 de la tarde pero siempre puede
+      ocurrir algún error informático o algún atraso a la hora de notificar los nuevos diagnósticos. Si los datos
+      del último dia no están disponibles es posible que la razón sean las mencionadas anteriormente.
+      </p>
+      <p class="info_prov_detail">
+     <a active="false" class="underline"><b>Quiero aportar nuevas funcionalidades o extender este proyecto</b></a>
+    <br>En ese caso el <a href="https://github.com/IES-Rafael-Alberti/TFG-Carmen-Morales">repositorio</a> está disponible de forma pública y cualquiera
+      puede clonarlo y extender sus funcionalidades o mejorar el código fuente.
+      </p>
+    </p>
+</div>
+{% endblock %}

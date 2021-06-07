@@ -1,0 +1,5 @@
+*/30 * * * * python .\manage.py get_acumulated set_territories >> /var/log/script.log
+*/30 * * * * python .\manage.py get_acumulated get_historic >> /var/log/script.log
+*/30 * * * * python .\manage.py get_acumulated --territorio -all >> /var/log/script.log
+*/30 * * * * python .\manage.py get_acumulated --territorio -pro >> /var/log/script.log
+# An empty line is required at the end of this file for a valid cron file.
