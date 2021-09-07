@@ -16,5 +16,5 @@ urlpatterns = [
     path('region-acumulado/', views.regionAccumulatedAll, name="region-acumulated-all"),
     path('provincia-acumulado', views.provinceAccumulatedAll, name="province-acumulated-all"),
     path('region-acumulado-detalle/<int:pk>/', views.regionAccumulatedDetail, name="region-acumulated-detail"),
-  
+    path('provincia-acumulado-detalle/<int:pk>/', views.provinceAccumulatedDetail, name="province-acumulated-detail")
 ]

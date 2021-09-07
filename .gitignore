@@ -78,7 +78,6 @@ target/
 .ipynb_checkpoints
 
 # IPython
-profile_default/
 ipython_config.py
 
 # pyenv
@@ -91,12 +90,8 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
-
-# Celery stuff
+# celery beat schedule file
 celerybeat-schedule
-celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
@@ -127,3 +122,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.Rproj.user
+
+.vscode

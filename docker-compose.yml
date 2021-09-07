@@ -3,13 +3,17 @@ version: '3.7'
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "service cron start && python3 manage.py migrate && python3 manage.py makemigrations && gunicorn COVID19_Andalucia.wsgi:application --bind 0.0.0.0:8000"
     volumes:
-      - ./:/usr/src/app/
-    ports:
-      - 8000:8000
+      - static_volume:/home/app/web/staticfiles
+    expose:
+      - 8000
     env_file:
-      - ./.env.dev
+      - ./.env.prod
+    restart: always
+    depends_on: 
+      - db
+
   db:
     image: postgres:12.0-alpine
     volumes:
@@ -17,6 +21,18 @@ services:
     environment:
         - POSTGRES_USER=django
         - POSTGRES_PASSWORD=django
-        - POSTGRES_DB=andalucia_covid
+        - POSTGRES_DB=andalucia_covid    
+    ports:
+        - "5432:5432"
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web    
+    volumes:
+      - static_volume:/home/app/web/staticfiles          
 volumes:
-    postgres_data:      
+    postgres_data:     
+    static_volume:

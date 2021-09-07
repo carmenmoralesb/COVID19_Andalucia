@@ -351,6 +351,11 @@ p > a:not([href]):not([tabindex]) {
   }
 }
 
+h2.error_text {
+  font-size: 80px;
+  text-align: center;
+}
+
 @media (prefers-color-scheme: dark) {
   main {
     flex: 1;

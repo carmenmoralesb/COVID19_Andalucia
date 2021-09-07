@@ -1,0 +1,5 @@
+0 14,18 * * * python3 manage.py set_territories
+0 14,18 * * * python3 manage.py get_acumulated --territorio all
+0 14,18 * * * python3 manage.py get_acumulated --territorio pro
+0 14,18 * * * python3 manage.py 
+# end of line

@@ -349,5 +349,5 @@ def regionAccumulatedDetail(request, pk):
 def provinceAccumulatedDetail(request, pk):
     prov = Province.objects.filter(pk=pk)[0]
     provAcc = AcumulatedProvinces.objects.filter(province=prov).order_by('-date',)
-    serializer = ProvincesAccumulatedSerializer(prov, many=True)
+    serializer = ProvincesAccumulatedSerializer(provAcc, many=True)
     return Response(serializer.data)
