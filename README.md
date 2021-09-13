@@ -30,6 +30,9 @@
 
 <a  name="introduccion"></a>
 
+![alt text](shoots/captura1.png)
+![alt text](shoots/captura2.png)
+
 Aplicación web realizada para el trabajo de fin de ciclo de Desarrollo de Aplicaciones Web sobre la evolución del COVID en Andalucía. El diagrama de clases utilizado es el siguiente:
 
 ![alt text](Diagrama_clases.png)
